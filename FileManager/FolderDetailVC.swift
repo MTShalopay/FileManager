@@ -127,9 +127,20 @@ extension FolderDetailVC: UITableViewDelegate, UITableViewDataSource {
 extension FolderDetailVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let imageURL = info[.imageURL] as! URL
+        
         let path = fileManagerService.documentDirectory.path + "/\(name)" + "/\(imageURL.lastPathComponent)"
         print(path)
         FileManager.default.createFile(atPath: path, contents: nil, attributes: nil)
+        do {
+            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
+              let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
+              let fileType = fileAttribute[FileAttributeKey.type] as! String
+              let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
+            print(fileSize, fileType, filecreationDate)
+        } catch {
+            print("Error: \(error)")
+        }
+        
         folder?.append(imageURL.lastPathComponent)
         dismiss(animated: true, completion: nil)
         self.folderTableView.reloadData()

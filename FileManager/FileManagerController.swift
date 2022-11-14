@@ -117,8 +117,11 @@ extension FileManagerController: UITableViewDelegate, UITableViewDataSource {
 extension FileManagerController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let imageURL = info[.imageURL] as! URL
-        fileManagerService.createFile(name: imageURL.lastPathComponent)
-        directories?.append(imageURL.lastPathComponent)
+        var imageName = imageURL.lastPathComponent.first
+        print("image\(imageName)")
+        
+        fileManagerService.createFile(name: "image\(imageName)")
+        directories?.append("image \(imageName!)")
         dismiss(animated: true, completion: nil)
         self.directoriesTableView.reloadData()
     }
