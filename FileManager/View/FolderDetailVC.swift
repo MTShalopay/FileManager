@@ -10,8 +10,8 @@ import UIKit
 class FolderDetailVC: UIViewController {
     private let fileManagerService = FileManagerService()
     var name: String = ""
-    var folder: [String]?
-    var isDir : ObjCBool = false
+    var folders: [String]?
+    var isDir : ObjCBool = true
     
     
     private lazy var folderTableView: UITableView = {
@@ -25,14 +25,16 @@ class FolderDetailVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        do {
-            let contentsDirectory = try FileManager.default.contentsOfDirectory(atPath: fileManagerService.documentDirectory.path + "/\(name)")
-            print(contentsDirectory)
-            self.folder = contentsDirectory
-        } catch {
-            print("Error of contentsOfDirectory: \(error)")
+        fileManagerService.contentsOfDirectory(nameFolder: name) { folder in
+            self.folders = folder
         }
+//        do {
+//            let contentsDirectory = try FileManager.default.contentsOfDirectory(atPath: fileManagerService.documentDirectory.path + "/\(name)")
+//            print(contentsDirectory)
+//            self.folder = contentsDirectory
+//        } catch {
+//            print("Error of contentsOfDirectory: \(error)")
+//        }
         setupNavigatorController(largeTitle: false, imageOneButton: UIImage(systemName: "folder.fill.badge.plus")!, imageTwoButton: UIImage(systemName: "photo.on.rectangle.angled")!, nameActionOneButton: #selector(createFolder), nameActionTwoButton: #selector(createImage))
     }
     
@@ -58,7 +60,7 @@ class FolderDetailVC: UIViewController {
     }
     @objc private func createFolder() {
         customAlertController { text in
-            self.folder?.append(text)
+            self.folders?.append(text)
             let folderPath = self.fileManagerService.documentDirectory.path + "/\(self.name)" + "/\(text)"
             print(folderPath)
             if !FileManager.default.fileExists(atPath: folderPath) {
@@ -84,21 +86,24 @@ class FolderDetailVC: UIViewController {
 
 extension FolderDetailVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return folder?.count ?? 0
+        return folders?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "default", for: indexPath)
-        if let nameItem = folder?[indexPath.row] {
+        if let nameItem = folders?[indexPath.row] {
             cell.textLabel?.text = nameItem
             if FileManager.default.fileExists(atPath: self.fileManagerService.documentDirectory.path + "/\(self.name)" + "/\(nameItem)", isDirectory: &isDir) {
                 if isDir.boolValue {
                     cell.accessoryType = .disclosureIndicator
+                    cell.isUserInteractionEnabled = true
                 } else {
                     cell.selectionStyle = .none
                     cell.isUserInteractionEnabled = false
                 }
             }
+            cell.selectionStyle = .none
+            cell.isUserInteractionEnabled = false
         }
         return cell
     }
@@ -112,9 +117,9 @@ extension FolderDetailVC: UITableViewDelegate, UITableViewDataSource {
         switch editingStyle {
         case .delete:
             print("DELETE")
-            let nameItem = folder![indexPath.row]
+            let nameItem = folders![indexPath.row]
             try? FileManager.default.removeItem(atPath: self.fileManagerService.documentDirectory.path + "/\(self.name)" + "/\(nameItem)")
-            folder?.remove(at: indexPath.row)
+            folders?.remove(at: indexPath.row)
             self.folderTableView.reloadData()
         default:
             print("default")
@@ -127,21 +132,22 @@ extension FolderDetailVC: UITableViewDelegate, UITableViewDataSource {
 extension FolderDetailVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let imageURL = info[.imageURL] as! URL
+        let imageName = imageURL.lastPathComponent.first
+        let image = info[.originalImage] as! UIImage
         
-        let path = fileManagerService.documentDirectory.path + "/\(name)" + "/\(imageURL.lastPathComponent)"
-        print(path)
-        FileManager.default.createFile(atPath: path, contents: nil, attributes: nil)
-        do {
-            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
-              let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
-              let fileType = fileAttribute[FileAttributeKey.type] as! String
-              let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
-            print(fileSize, fileType, filecreationDate)
-        } catch {
-            print("Error: \(error)")
-        }
+        fileManagerService.createFile(nameFolder: name, image: image, imageName: "\(String(describing: imageName!))")
         
-        folder?.append(imageURL.lastPathComponent)
+//        do {
+//            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
+//              let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
+//              let fileType = fileAttribute[FileAttributeKey.type] as! String
+//              let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
+//            print("qqq: \(fileSize), \(fileType), \(filecreationDate)")
+//        } catch {
+//            print("Error: \(error)")
+//        }
+        
+        folders?.append("Image \(imageName!).jpeg")
         dismiss(animated: true, completion: nil)
         self.folderTableView.reloadData()
     }

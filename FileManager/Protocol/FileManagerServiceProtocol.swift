@@ -6,16 +6,17 @@
 //
 
 import Foundation
+import UIKit
 
-protocol FileManagerServiceProtocol {
-    func contentsOfDirectory(comlitionHangler: (([String])) -> Void)
+protocol FileManagerServiceProtocol: AnyObject {
+    func contentsOfDirectory(nameFolder: String?, comlitionHangler: (([String])) -> Void)
     func createDirectory(name: String)
-    func createFile(name: String)
+    func createFile(nameFolder: String?, image: UIImage, imageName: String)
     func removeContent(name: String)
     func setupTitleDocumentDbirectory(comlitionHangler: ((String)) -> Void)
 }
 
 struct Content {
-    let folder: String
-    let file: String
+    let folder: UIImage?
+    let image: UIImage?
 }

@@ -9,12 +9,15 @@ import UIKit
 
 class FileManagerController: UIViewController {
     private let fileManagerService = FileManagerService()
+    private let userDefaults = UserDefaults.standard
     var directories: [String]?
-    var isDir : ObjCBool = false
+    var imageSizes: [String]?
+    var isDir : ObjCBool = true
     
       private lazy var directoriesTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "default")
+        tableView.register(FileManagerCell.self, forCellReuseIdentifier: FileManagerCell.indetificator)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,6 +26,8 @@ class FileManagerController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(imageSizes)
+        
         setupView()
         view.backgroundColor = .systemBackground
         fileManagerService.setupTitleDocumentDbirectory { title in
@@ -30,14 +35,31 @@ class FileManagerController: UIViewController {
                 self.title = title
             }
         }
-        fileManagerService.contentsOfDirectory { directories in
+        fileManagerService.contentsOfDirectory(nameFolder: nil) { directories in
             self.directories = directories
         }
         
         setupNavigatorController(largeTitle: true, imageOneButton: UIImage(systemName: "folder.fill.badge.plus")!, imageTwoButton: UIImage(systemName: "photo.on.rectangle.angled")!, nameActionOneButton: #selector(createFolder), nameActionTwoButton: #selector(createImage))
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(#function)
         
+        print(imageSizes)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        setupSortedFiles()
+        directoriesTableView.reloadData()
     }
     
+    private func setupSortedFiles() {
+        if userDefaults.bool(forKey: "sortedSwitch") {
+            directories?.sort(by: { $0 < $1 })
+            directoriesTableView.reloadData()
+        } else {
+            directories?.sort(by: { $0 > $1 })
+            directoriesTableView.reloadData()
+        }
+    }
     private func setupView() {
         view.addSubview(directoriesTableView)
         NSLayoutConstraint.activate([
@@ -52,6 +74,7 @@ class FileManagerController: UIViewController {
         customAlertController { text in
             self.directories?.append(text)
             self.fileManagerService.createDirectory(name: text)
+            self.setupSortedFiles()
             self.directoriesTableView.reloadData()
         }
     }
@@ -73,14 +96,22 @@ extension FileManagerController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "default", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: FileManagerCell.indetificator, for: indexPath) as? FileManagerCell else {
+            let cellDefault = UITableViewCell(style: .value1, reuseIdentifier: "default")
+            return cellDefault
+        }
+//        let cell = UITableViewCell(style: .value1, reuseIdentifier: "default")
         if let directory = directories?[indexPath.row] {
-            cell.textLabel?.text = directory
+            cell.nameLabel.text = directory
             if FileManager.default.fileExists(atPath: fileManagerService.documentDirectory.path + "/\(directory)", isDirectory: &isDir) {
                 if isDir.boolValue {
                     cell.accessoryType = .disclosureIndicator
+                    cell.isUserInteractionEnabled = true
                 } else {
+                    let size  = imageSizes?[indexPath.row] ?? "35345435"
+                    cell.sizeLabel.text = size
                     cell.selectionStyle = .none
+                    cell.accessoryType = .none
                     cell.isUserInteractionEnabled = false
                 }
             }
@@ -102,7 +133,6 @@ extension FileManagerController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
         case .delete:
-            print("DELETE")
             let directory = directories![indexPath.row]
             fileManagerService.removeContent(name: directory)
             directories?.remove(at: indexPath.row)
@@ -117,12 +147,28 @@ extension FileManagerController: UITableViewDelegate, UITableViewDataSource {
 extension FileManagerController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let imageURL = info[.imageURL] as! URL
-        var imageName = imageURL.lastPathComponent.first
-        print("image\(imageName)")
+        let imageName = imageURL.lastPathComponent.first
+        let image = info[.originalImage] as! UIImage
         
-        fileManagerService.createFile(name: "image\(imageName)")
-        directories?.append("image \(imageName!)")
-        dismiss(animated: true, completion: nil)
+        fileManagerService.createFile(nameFolder: nil, image: image, imageName: "\(String(describing: imageName!))")
+        directories?.append("Image \(imageName!).jpeg")
+        
+        let path = fileManagerService.documentDirectory.path + "/Image \(imageName!).jpeg"
+        
+        do {
+            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
+            let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
+            let fileType = fileAttribute[FileAttributeKey.type] as! String
+            let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
+            let fileExtension = URL(fileURLWithPath: path).pathExtension
+            print("Name: \("Image \(imageName!).jpeg"), Size: \(fileSize / 1000000) Мбайт, Type: \(fileType), Date: \(filecreationDate), Extension: \(fileExtension)")
+        } catch {
+            print("Error: \(error)")
+        }
+        dismiss(animated: true) {
+            
+        }
+        self.setupSortedFiles()
         self.directoriesTableView.reloadData()
     }
     
