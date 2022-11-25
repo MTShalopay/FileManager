@@ -16,26 +16,23 @@ class KeychainService: KeychainServiceProtocol {
     
     func getData() -> String? {
         do {
-            let result = try keychain.get("password")
-            if let result = result {
+            if let result = try keychain.get("password") {
                 return result
             }
         } catch {
             print("Error setupKeyChain: \(error)")
         }
-        print(#function)
         return nil
     }
     
     func saveData(name: String) {
        keychain["password"] = name
-        print(#function)
     }
     
     func updateData(name: String) {
         saveData(name: name)
-        print(#function)
     }
+    
     func remove(for name: String) {
         do {
             try keychain.remove(name)
