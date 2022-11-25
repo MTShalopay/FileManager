@@ -33,8 +33,8 @@ extension UIViewController {
     }
     func alertErrorPassword(text: String) {
         let alertController = UIAlertController(title: "Внимание", message: text, preferredStyle: .alert)
-        let actionOk = UIAlertAction(title: "Ок", style: .cancel, handler: { [self] action in
-        dismiss(animated: true, completion: nil)
+        let actionOk = UIAlertAction(title: "Ок", style: .cancel, handler: { action in
+            self.dismiss(animated: true, completion: nil)
         })
         alertController.addAction(actionOk)
         present(alertController, animated: true, completion: nil)

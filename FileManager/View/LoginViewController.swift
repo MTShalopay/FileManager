@@ -67,7 +67,6 @@ class LoginViewController: UIViewController {
         return stack
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         buttonState()
@@ -78,9 +77,7 @@ class LoginViewController: UIViewController {
         } else {
             loginState = .signUp
         }
-        
         buttonState()
-       
     }
     
     @objc func buttonAction() {
@@ -90,7 +87,6 @@ class LoginViewController: UIViewController {
             buttonLogin.layer.shadowOffset = CGSize(width: 4, height: 4)
         }
         shadowSwitch = !shadowSwitch
-        
         switch loginState {
         case .signIn:
             print("signin")
@@ -104,6 +100,11 @@ class LoginViewController: UIViewController {
             
         case .signUp:
             print("signup")
+            guard passwordTextField.text!.count >= 4, !passwordTextField.text!.isEmpty else {
+                alertErrorPassword(text: "Пароль должен состоять минимум из четырёх символов")
+                passwordTextField.text = ""
+                return
+            }
             if password == "" {
                 password = passwordTextField.text!
                 passwordTextField.text = ""
@@ -126,17 +127,20 @@ class LoginViewController: UIViewController {
                     navigationController?.navigationBar.isHidden = true
                     self.navigationController?.setViewControllers([tabBarController], animated: true)
                 } else {
-                    print("пароли не совпадают")
                     alertErrorPassword(text: "Пароли к сожелению не совпадают")
+                    passwordTextField.text = ""
                 }
             }
         case .passEdit:
             buttonLogin.setTitle("Изменить пароль", for: .normal)
             print("passedit")
+            guard passwordTextField.text!.count >= 4, !passwordTextField.text!.isEmpty else {
+                alertErrorPassword(text: "Пароль должен состоять минимум из четырёх символов")
+                passwordTextField.text = ""
+                return
+            }
             keychainService.saveData(name: passwordTextField.text!)
             alertErrorPassword(text: "Пароль изменен на \(passwordTextField.text!)")
-            
-            
         }
     }
     
@@ -162,16 +166,6 @@ class LoginViewController: UIViewController {
             verticalStack.heightAnchor.constraint(equalToConstant: 120),
             
         ])
-    }
-    private func alertError() {
-        guard passwordTextField.text?.count ?? 0 >= 4, !passwordTextField.text!.isEmpty else {
-            buttonLogin.isEnabled = false
-            let alertController = UIAlertController(title: "Ошибка", message: "Пароль должен состоять минимум из четырёх символов", preferredStyle: .alert)
-            let actionCancel = UIAlertAction(title: "Понятно", style: .default)
-            alertController.addAction(actionCancel)
-            present(alertController, animated: true, completion: nil)
-            return
-        }
     }
     
     internal func buttonState() {

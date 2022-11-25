@@ -11,10 +11,8 @@ class FileManagerController: UIViewController {
     private let fileManagerService = FileManagerService()
     private let userDefaults = UserDefaults.standard
     var directories: [String]?
-    var imageSizes: [String]?
     var isDir : ObjCBool = true
-    
-      private lazy var directoriesTableView: UITableView = {
+    private lazy var directoriesTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "default")
         tableView.register(FileManagerCell.self, forCellReuseIdentifier: FileManagerCell.indetificator)
@@ -26,8 +24,6 @@ class FileManagerController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(imageSizes)
-        
         setupView()
         view.backgroundColor = .systemBackground
         fileManagerService.setupTitleDocumentDbirectory { title in
@@ -38,14 +34,11 @@ class FileManagerController: UIViewController {
         fileManagerService.contentsOfDirectory(nameFolder: nil) { directories in
             self.directories = directories
         }
-        
+        print(fileManagerService.documentDirectory.path)
         setupNavigatorController(largeTitle: true, imageOneButton: UIImage(systemName: "folder.fill.badge.plus")!, imageTwoButton: UIImage(systemName: "photo.on.rectangle.angled")!, nameActionOneButton: #selector(createFolder), nameActionTwoButton: #selector(createImage))
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(#function)
-        
-        print(imageSizes)
         navigationController?.navigationBar.prefersLargeTitles = true
         setupSortedFiles()
         directoriesTableView.reloadData()
@@ -60,6 +53,7 @@ class FileManagerController: UIViewController {
             directoriesTableView.reloadData()
         }
     }
+    
     private func setupView() {
         view.addSubview(directoriesTableView)
         NSLayoutConstraint.activate([
@@ -100,16 +94,23 @@ extension FileManagerController: UITableViewDelegate, UITableViewDataSource {
             let cellDefault = UITableViewCell(style: .value1, reuseIdentifier: "default")
             return cellDefault
         }
-//        let cell = UITableViewCell(style: .value1, reuseIdentifier: "default")
         if let directory = directories?[indexPath.row] {
             cell.nameLabel.text = directory
+            let path = fileManagerService.documentDirectory.path + "/\(directory)"
             if FileManager.default.fileExists(atPath: fileManagerService.documentDirectory.path + "/\(directory)", isDirectory: &isDir) {
                 if isDir.boolValue {
+                    cell.sizeLabel.text = ""
                     cell.accessoryType = .disclosureIndicator
                     cell.isUserInteractionEnabled = true
                 } else {
-                    let size  = imageSizes?[indexPath.row] ?? "35345435"
-                    cell.sizeLabel.text = size
+                    
+                    if let imagePng = UIImage(contentsOfFile: path)?.pngData() {
+                        if userDefaults.bool(forKey: "presentSizePictures") {
+                            cell.sizeLabel.text = "\(imagePng.count / 1000000) Мбайт"
+                        } else {
+                            cell.sizeLabel.text = ""
+                        }
+                    }
                     cell.selectionStyle = .none
                     cell.accessoryType = .none
                     cell.isUserInteractionEnabled = false
@@ -120,7 +121,6 @@ extension FileManagerController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("didselect \(indexPath.section) - \(indexPath.row)")
         let directory = directories![indexPath.row]
         let folderDetail = FolderDetailVC()
         folderDetail.name = directory
@@ -152,19 +152,17 @@ extension FileManagerController: UIImagePickerControllerDelegate, UINavigationCo
         
         fileManagerService.createFile(nameFolder: nil, image: image, imageName: "\(String(describing: imageName!))")
         directories?.append("Image \(imageName!).jpeg")
-        
-        let path = fileManagerService.documentDirectory.path + "/Image \(imageName!).jpeg"
-        
-        do {
-            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
-            let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
-            let fileType = fileAttribute[FileAttributeKey.type] as! String
-            let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
-            let fileExtension = URL(fileURLWithPath: path).pathExtension
-            print("Name: \("Image \(imageName!).jpeg"), Size: \(fileSize / 1000000) Мбайт, Type: \(fileType), Date: \(filecreationDate), Extension: \(fileExtension)")
-        } catch {
-            print("Error: \(error)")
-        }
+//        let path = fileManagerService.documentDirectory.path + "/Image \(imageName!).jpeg"
+//        do {
+//            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
+//            let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
+//            let fileType = fileAttribute[FileAttributeKey.type] as! String
+//            let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
+//            let fileExtension = URL(fileURLWithPath: path).pathExtension
+//            print("Name: \("Image \(imageName!).jpeg"), Size: \(fileSize / 1000000) Мбайт, Type: \(fileType), Date: \(filecreationDate), Extension: \(fileExtension)")
+//        } catch {
+//            print("Error: \(error)")
+//        }
         dismiss(animated: true) {
             
         }
@@ -173,7 +171,6 @@ extension FileManagerController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print(#function)
         dismiss(animated: true, completion: nil)
     }
 }

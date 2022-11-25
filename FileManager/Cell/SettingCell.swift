@@ -12,7 +12,6 @@ class SettingCell: UITableViewCell {
     private let userDefaults = UserDefaults.standard
     internal lazy var mySwitch: UISwitch = {
         let mySwitch = UISwitch()
-        //mySwitch.addTarget(self, action: #selector(tapDidChange), for: .valueChanged)
         mySwitch.isOn = false
         mySwitch.translatesAutoresizingMaskIntoConstraints = false
         return mySwitch

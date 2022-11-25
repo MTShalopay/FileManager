@@ -9,10 +9,8 @@ import UIKit
 
 class SettingViewController: UIViewController {
     private let userDefaults = UserDefaults.standard
-    
     private var settingHeaderText = ["Сортировка ячеек", "Показать размер фотографии", "Поменять пароль"]
     private var settingText = ["По алфавиту", "Отобразить размер", "Поменять пароль"]
-    
     private lazy var settingTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(SettingCell.self, forCellReuseIdentifier: SettingCell.indentificator)
@@ -26,7 +24,6 @@ class SettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Настройки"
@@ -36,7 +33,7 @@ class SettingViewController: UIViewController {
         settingTableView.alwaysBounceVertical = false
     }
     
-    func setupView() {
+    private func setupView() {
         view.addSubview(settingTableView)
         navigationController?.isToolbarHidden = false
         NSLayoutConstraint.activate([
@@ -58,17 +55,16 @@ class SettingViewController: UIViewController {
         default:
             print("ops")
         }
-        
     }
+    
     private func editPassword() {
         let loginViewController = LoginViewController()
             loginViewController.modalPresentationStyle = .automatic
             present(loginViewController, animated: true)
-        loginViewController.loginState = .passEdit
-        loginViewController.buttonState()
+            loginViewController.loginState = .passEdit
+            loginViewController.buttonState()
             loginViewController.buttonLogin.setTitle("Изменить пароль", for: .normal)
             loginViewController.passwordTextField.placeholder = "Введите новый пароль"
-        
     }
     
 }
@@ -113,7 +109,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 2 {
-            print(indexPath.section - indexPath.row)
             editPassword()
         }
     }

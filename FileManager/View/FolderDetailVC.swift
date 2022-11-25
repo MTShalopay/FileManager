@@ -8,12 +8,11 @@
 import UIKit
 
 class FolderDetailVC: UIViewController {
+    private let userDefaults = UserDefaults.standard
     private let fileManagerService = FileManagerService()
     var name: String = ""
     var folders: [String]?
     var isDir : ObjCBool = true
-    
-    
     private lazy var folderTableView: UITableView = {
       let tableView = UITableView(frame: .zero, style: .grouped)
       tableView.register(UITableViewCell.self, forCellReuseIdentifier: "default")
@@ -28,13 +27,6 @@ class FolderDetailVC: UIViewController {
         fileManagerService.contentsOfDirectory(nameFolder: name) { folder in
             self.folders = folder
         }
-//        do {
-//            let contentsDirectory = try FileManager.default.contentsOfDirectory(atPath: fileManagerService.documentDirectory.path + "/\(name)")
-//            print(contentsDirectory)
-//            self.folder = contentsDirectory
-//        } catch {
-//            print("Error of contentsOfDirectory: \(error)")
-//        }
         setupNavigatorController(largeTitle: false, imageOneButton: UIImage(systemName: "folder.fill.badge.plus")!, imageTwoButton: UIImage(systemName: "photo.on.rectangle.angled")!, nameActionOneButton: #selector(createFolder), nameActionTwoButton: #selector(createImage))
     }
     
@@ -42,14 +34,24 @@ class FolderDetailVC: UIViewController {
         super.viewWillAppear(animated)
         setupNavigatorController()
         setupView()
+        setupSortedFiles()
     }
     
+    private func setupSortedFiles() {
+        if userDefaults.bool(forKey: "sortedSwitch") {
+            folders?.sort(by: { $0 < $1 })
+            folderTableView.reloadData()
+        } else {
+            folders?.sort(by: { $0 > $1 })
+            folderTableView.reloadData()
+        }
+    }
     
-    func setupNavigatorController() {
+    private func setupNavigatorController() {
         self.title = name
         view.backgroundColor = .systemBackground
     }
-    func setupView() {
+    private func setupView() {
         view.addSubview(folderTableView)
         NSLayoutConstraint.activate([
             folderTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -70,6 +72,7 @@ class FolderDetailVC: UIViewController {
                     print(error.localizedDescription)
                 }
             }
+            self.setupSortedFiles()
             self.folderTableView.reloadData()
         }
     }
@@ -90,20 +93,27 @@ extension FolderDetailVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "default", for: indexPath)
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "default")
         if let nameItem = folders?[indexPath.row] {
             cell.textLabel?.text = nameItem
+            let path = fileManagerService.documentDirectory.path + "/\(self.name)" + "/\(nameItem)"
             if FileManager.default.fileExists(atPath: self.fileManagerService.documentDirectory.path + "/\(self.name)" + "/\(nameItem)", isDirectory: &isDir) {
                 if isDir.boolValue {
+                    cell.detailTextLabel?.text = ""
                     cell.accessoryType = .disclosureIndicator
                     cell.isUserInteractionEnabled = true
                 } else {
+                    if let imagePng = UIImage(contentsOfFile: path)?.pngData() {
+                        if userDefaults.bool(forKey: "presentSizePictures") {
+                            cell.detailTextLabel?.text = "\(imagePng.count / 1000000) Мбайт"
+                        } else {
+                            cell.detailTextLabel?.text = ""
+                        }
+                    }
                     cell.selectionStyle = .none
                     cell.isUserInteractionEnabled = false
                 }
             }
-            cell.selectionStyle = .none
-            cell.isUserInteractionEnabled = false
         }
         return cell
     }
@@ -134,26 +144,13 @@ extension FolderDetailVC: UIImagePickerControllerDelegate, UINavigationControlle
         let imageURL = info[.imageURL] as! URL
         let imageName = imageURL.lastPathComponent.first
         let image = info[.originalImage] as! UIImage
-        
         fileManagerService.createFile(nameFolder: name, image: image, imageName: "\(String(describing: imageName!))")
-        
-//        do {
-//            let fileAttribute = try FileManager.default.attributesOfItem(atPath: path)
-//              let fileSize = fileAttribute[FileAttributeKey.size] as! Int64
-//              let fileType = fileAttribute[FileAttributeKey.type] as! String
-//              let filecreationDate = fileAttribute[FileAttributeKey.creationDate] as! Date
-//            print("qqq: \(fileSize), \(fileType), \(filecreationDate)")
-//        } catch {
-//            print("Error: \(error)")
-//        }
-        
         folders?.append("Image \(imageName!).jpeg")
         dismiss(animated: true, completion: nil)
         self.folderTableView.reloadData()
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print(#function)
         dismiss(animated: true, completion: nil)
     }
 }

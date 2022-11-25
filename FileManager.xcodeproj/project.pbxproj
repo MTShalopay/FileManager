@@ -72,8 +72,26 @@
 				494EE90D290308CB0086D1EE /* FileManagerController.swift */,
 				49482811292D250E00AD190D /* SettingViewController.swift */,
 				4940DF7B29192BC500317B82 /* FolderDetailVC.swift */,
+				4951E78529227AAB000B3EE2 /* LoginViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		494E65692931173A00D7A0D1 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				494E656A2931175500D7A0D1 /* KeychainService */,
+				494EE92A29031B390086D1EE /* FileManager */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		494E656A2931175500D7A0D1 /* KeychainService */ = {
+			isa = PBXGroup;
+			children = (
+				4951E78F2922BC79000B3EE2 /* KeychainService.swift */,
+			);
+			name = KeychainService;
 			sourceTree = "<group>";
 		};
 		494EE8FD290308CB0086D1EE = {
@@ -99,13 +117,11 @@
 				494EE92829031B030086D1EE /* Protocol */,
 				494E65662931015700D7A0D1 /* View */,
 				494E65652931014100D7A0D1 /* Cell */,
-				494EE92A29031B390086D1EE /* FileManager */,
+				494E65692931173A00D7A0D1 /* Service */,
 				494EE912290308CC0086D1EE /* Assets.xcassets */,
 				494EE914290308CC0086D1EE /* LaunchScreen.storyboard */,
 				494EE917290308CC0086D1EE /* Info.plist */,
 				4940C8C629086F4700380FAD /* Extension.swift */,
-				4951E78529227AAB000B3EE2 /* LoginViewController.swift */,
-				4951E78F2922BC79000B3EE2 /* KeychainService.swift */,
 			);
 			path = FileManager;
 			sourceTree = "<group>";

@@ -22,7 +22,6 @@ class FileManagerCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -30,7 +29,7 @@ class FileManagerCell: UITableViewCell {
         setupCell()
     }
     
-    func setupCell() {
+    private func setupCell() {
         contentView.addSubview(nameLabel)
         contentView.addSubview(sizeLabel)
         NSLayoutConstraint.activate([
@@ -40,9 +39,7 @@ class FileManagerCell: UITableViewCell {
             sizeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
         ])
     }
-    
-    
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
