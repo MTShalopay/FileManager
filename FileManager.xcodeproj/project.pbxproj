@@ -3,12 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4940C8C729086F4700380FAD /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4940C8C629086F4700380FAD /* Extension.swift */; };
 		4940DF7C29192BC500317B82 /* FolderDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4940DF7B29192BC500317B82 /* FolderDetailVC.swift */; };
+		4942260D292FF33200F5C661 /* FileManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4942260C292FF33200F5C661 /* FileManagerCell.swift */; };
+		49482812292D250E00AD190D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49482811292D250E00AD190D /* SettingViewController.swift */; };
+		49482815292D309200AD190D /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49482814292D309200AD190D /* SettingCell.swift */; };
 		494EE90A290308CB0086D1EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EE909290308CB0086D1EE /* AppDelegate.swift */; };
 		494EE90C290308CB0086D1EE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EE90B290308CB0086D1EE /* SceneDelegate.swift */; };
 		494EE90E290308CB0086D1EE /* FileManagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EE90D290308CB0086D1EE /* FileManagerController.swift */; };
@@ -16,11 +19,18 @@
 		494EE916290308CC0086D1EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 494EE914290308CC0086D1EE /* LaunchScreen.storyboard */; };
 		494EE92129031AAA0086D1EE /* FileManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EE92029031AAA0086D1EE /* FileManagerService.swift */; };
 		494EE92629031AE80086D1EE /* FileManagerServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494EE92529031AE80086D1EE /* FileManagerServiceProtocol.swift */; };
+		4951E78629227AAB000B3EE2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4951E78529227AAB000B3EE2 /* LoginViewController.swift */; };
+		4951E78A2922A529000B3EE2 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 4951E7892922A529000B3EE2 /* KeychainAccess */; };
+		4951E78D2922BBAA000B3EE2 /* KeychainServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4951E78C2922BBAA000B3EE2 /* KeychainServiceProtocol.swift */; };
+		4951E7902922BC79000B3EE2 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4951E78F2922BC79000B3EE2 /* KeychainService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4940C8C629086F4700380FAD /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		4940DF7B29192BC500317B82 /* FolderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderDetailVC.swift; sourceTree = "<group>"; };
+		4942260C292FF33200F5C661 /* FileManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerCell.swift; sourceTree = "<group>"; };
+		49482811292D250E00AD190D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		49482814292D309200AD190D /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		494EE906290308CB0086D1EE /* FileManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		494EE909290308CB0086D1EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		494EE90B290308CB0086D1EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +40,9 @@
 		494EE917290308CC0086D1EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		494EE92029031AAA0086D1EE /* FileManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerService.swift; sourceTree = "<group>"; };
 		494EE92529031AE80086D1EE /* FileManagerServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerServiceProtocol.swift; sourceTree = "<group>"; };
+		4951E78529227AAB000B3EE2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4951E78C2922BBAA000B3EE2 /* KeychainServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceProtocol.swift; sourceTree = "<group>"; };
+		4951E78F2922BC79000B3EE2 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,12 +50,50 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4951E78A2922A529000B3EE2 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		494E65652931014100D7A0D1 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				49482814292D309200AD190D /* SettingCell.swift */,
+				4942260C292FF33200F5C661 /* FileManagerCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		494E65662931015700D7A0D1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				494EE90D290308CB0086D1EE /* FileManagerController.swift */,
+				49482811292D250E00AD190D /* SettingViewController.swift */,
+				4940DF7B29192BC500317B82 /* FolderDetailVC.swift */,
+				4951E78529227AAB000B3EE2 /* LoginViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		494E65692931173A00D7A0D1 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				494E656A2931175500D7A0D1 /* KeychainService */,
+				494EE92A29031B390086D1EE /* FileManager */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		494E656A2931175500D7A0D1 /* KeychainService */ = {
+			isa = PBXGroup;
+			children = (
+				4951E78F2922BC79000B3EE2 /* KeychainService.swift */,
+			);
+			name = KeychainService;
+			sourceTree = "<group>";
+		};
 		494EE8FD290308CB0086D1EE = {
 			isa = PBXGroup;
 			children = (
@@ -64,9 +115,9 @@
 			children = (
 				494EE92329031AB50086D1EE /* Aplication */,
 				494EE92829031B030086D1EE /* Protocol */,
-				494EE90D290308CB0086D1EE /* FileManagerController.swift */,
-				4940DF7B29192BC500317B82 /* FolderDetailVC.swift */,
-				494EE92A29031B390086D1EE /* FileManager */,
+				494E65662931015700D7A0D1 /* View */,
+				494E65652931014100D7A0D1 /* Cell */,
+				494E65692931173A00D7A0D1 /* Service */,
 				494EE912290308CC0086D1EE /* Assets.xcassets */,
 				494EE914290308CC0086D1EE /* LaunchScreen.storyboard */,
 				494EE917290308CC0086D1EE /* Info.plist */,
@@ -88,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				494EE92529031AE80086D1EE /* FileManagerServiceProtocol.swift */,
+				4951E78C2922BBAA000B3EE2 /* KeychainServiceProtocol.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -116,6 +168,9 @@
 			dependencies = (
 			);
 			name = FileManager;
+			packageProductDependencies = (
+				4951E7892922A529000B3EE2 /* KeychainAccess */,
+			);
 			productName = FileManager;
 			productReference = 494EE906290308CB0086D1EE /* FileManager.app */;
 			productType = "com.apple.product-type.application";
@@ -143,6 +198,9 @@
 				Base,
 			);
 			mainGroup = 494EE8FD290308CB0086D1EE;
+			packageReferences = (
+				4951E7882922A529000B3EE2 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			productRefGroup = 494EE907290308CB0086D1EE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -169,10 +227,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4951E78D2922BBAA000B3EE2 /* KeychainServiceProtocol.swift in Sources */,
+				49482812292D250E00AD190D /* SettingViewController.swift in Sources */,
+				49482815292D309200AD190D /* SettingCell.swift in Sources */,
 				494EE90E290308CB0086D1EE /* FileManagerController.swift in Sources */,
 				494EE90A290308CB0086D1EE /* AppDelegate.swift in Sources */,
+				4951E7902922BC79000B3EE2 /* KeychainService.swift in Sources */,
 				494EE92629031AE80086D1EE /* FileManagerServiceProtocol.swift in Sources */,
 				4940C8C729086F4700380FAD /* Extension.swift in Sources */,
+				4951E78629227AAB000B3EE2 /* LoginViewController.swift in Sources */,
+				4942260D292FF33200F5C661 /* FileManagerCell.swift in Sources */,
 				494EE90C290308CB0086D1EE /* SceneDelegate.swift in Sources */,
 				4940DF7C29192BC500317B82 /* FolderDetailVC.swift in Sources */,
 				494EE92129031AAA0086D1EE /* FileManagerService.swift in Sources */,
@@ -369,6 +433,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4951E7882922A529000B3EE2 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4951E7892922A529000B3EE2 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4951E7882922A529000B3EE2 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 494EE8FE290308CB0086D1EE /* Project object */;
 }
