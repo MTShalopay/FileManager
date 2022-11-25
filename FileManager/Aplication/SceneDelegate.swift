@@ -34,7 +34,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navVC = UINavigationController(rootViewController: loginVC)
         print("SceneDelegate: \(keychainService.getData())")
 //        keychainService.removeAll()
-        if keychainService.getData() != nil {
+        let passwordData = keychainService.getData()
+        if passwordData != nil {
             window?.rootViewController = tabBarController
         } else {
             window?.rootViewController = navVC
