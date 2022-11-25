@@ -10,17 +10,35 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let keychainService = KeychainService.shared
+    let tabBarController = UITabBarController()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
+        let fileManagerVC = FileManagerController()
+        fileManagerVC.tabBarItem.title = "Файловый менеджер"
+        fileManagerVC.tabBarItem.image = UIImage(systemName: "folder")
+        let fileManagerNc = UINavigationController(rootViewController: fileManagerVC)
         
-        let viewController = FileManagerController()
-        let navVC = UINavigationController(rootViewController: viewController)
-        window?.rootViewController = navVC
+        let settingViewController = SettingViewController()
+        settingViewController.tabBarItem.title = "Настройки"
+        settingViewController.tabBarItem.image = UIImage(systemName: "gearshape")
+        let settingViewControllerNc = UINavigationController(rootViewController: settingViewController)
         
+        tabBarController.viewControllers = [fileManagerNc, settingViewControllerNc]
+        
+        let loginVC = LoginViewController()
+        let navVC = UINavigationController(rootViewController: loginVC)
+        print("SceneDelegate: \(keychainService.getData())")
+//        keychainService.removeAll()
+        if keychainService.getData() != nil {
+            window?.rootViewController = tabBarController
+        } else {
+            window?.rootViewController = navVC
+        }
         window?.makeKeyAndVisible()
     }
 
